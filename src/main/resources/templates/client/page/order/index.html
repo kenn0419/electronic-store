@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <th:block th:replace="~{client/layout/css :: css}"></th:block>
+    <style>
+        .order-card {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .order-header {
+            background-color: transparent;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #00000017;
+        }
+
+        .product-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .product-details {
+            flex-grow: 1;
+        }
+
+        .product-price {
+            text-align: right;
+            font-weight: bold;
+            font-size: 18px;
+            color: #ff5722;
+        }
+
+        .return-label {
+            background-color: transparent;
+            border: 1px solid red;
+            padding: 5px 10px;
+            color: red;
+        }
+
+        .order-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .total-price {
+            font-size: 1rem;
+        }
+
+        .total-price span {
+            font-size: 1.25rem;
+            color: red;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #ff5722;
+            border: none;
+        }
+    </style>
+    <title>Your Order</title>
+</head>
+
+<body>
+    <th:block th:replace="~{client/layout/header :: header}"></th:block>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Orders</h1>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="untree_co-section before-footer-section">
+        <div class="container">
+            <div th:if="${orders != null and !#lists.isEmpty(orders)}" class="row mb-5" th:each="order : ${orders}">
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="vendor-info">
+                            <strong>Đơn hàng</strong>
+                            <p th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy')}"></p>
+                        </div>
+                        <div class="order-status text-success">
+                            <!-- Đơn hàng đã hoàn trả thành công  -->
+                            <span class="text-danger" th:switch="${order.status.name}"
+                                style="padding-left: 3px; border-left: 1px solid #00000017;">
+                                <span id="order-status-label" th:case="'PENDING'">Đơn hàng đang được xử lý</span>
+                                <span id="order-status-label" th:case="'PROCESSING'">Đang xử lý đơn hàng</span>
+                                <span id="order-status-label" th:case="'SHIPPED'">Đơn hàng đang được giao</span>
+                                <span id="order-status-label" th:case="'DELIVERED'">Đã giao đơn hàng</span>
+                                <span id="order-status-label" th:case="'CANCELLED'">Đơn hàng đã bị hủy</span>
+                                <span id="order-status-label" th:case="'RETURNED'">Đơn hàng đã được trả lại</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="product-item" th:each="orderDetail, iStat : ${order.orderDetails}">
+                        <a href="#">
+                            <img th:src="@{/images/product/{thumbnail}(thumbnail=${orderDetail.product.thumbnail})}"
+                                alt="@{iStat.index}">
+                        </a>
+                        <div class="product-details">
+                            <h5 th:text="${orderDetail.product.title}">Sạc nhanh PD 20W Không Nóng Máy</h5>
+                            <p th:text="${orderDetail.product.category.name}">Phân loại hàng: Củ 20WP15 Mới Dùng Được
+                            </p>
+                            <p th:text="@{'Số lượng: ' + ${orderDetail.quantity}}">Số lượng: 1</p>
+                            <button class="return-label">Trả hàng miễn phí 15 ngày</button>
+                        </div>
+                        <div class="product-price">
+                            <p
+                                th:text="${#numbers.formatDecimal(orderDetail.product.price, 1, 'COMMA', -1, 'POINT')} + 'đ'">
+                                ₫91.080</p>
+                        </div>
+                    </div>
+
+                    <div class="order-actions">
+                        <div>
+                            <button th:data-order-id="${order.id}" class="btn btn-primary" id="cancel-btn">Huỷ đơn
+                                hàng</button>
+                        </div>
+                        <div class="total-price">
+                            Thành tiền:
+                            <span
+                                th:text="${#numbers.formatDecimal(order.totalPrice, 1, 'COMMA', -1, 'POINT')} + 'đ'">₫91.080</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${orders == null or #lists.isEmpty(orders)}" class="row mb-5">
+                <h4 th:text="${emptyOrder}"></h4>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{client/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{client/layout/js :: js}"></th:block>
+
+    <script>
+        function isLogin() {
+            const navbarElement = $('.navbar-collapse');
+            const loginChildElement = navbarElement.find('a.login');
+            if (loginChildElement.length > 0) {
+                return false;
+            }
+            return true;
+        }
+        $('button#cancel-btn').click(function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Lỗi thao tác',
+                    text: 'Bạn cần đăng nhập tài khoản để huỷ đơn hàng',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
+            const orderId = $(this).attr('data-order-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                url: `${window.location.origin}/api/cancel-order/${orderId}`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                contentType: "application/json",
+
+                success: function (response) {
+                    if (response.status) {
+                        $.toast({
+                            heading: 'Đơn hàng',
+                            text: response.message,
+                            position: 'top-right',
+
+                        })
+                        $('#order-status-label').text("Đơn hàng đã bị hủy")
+                    } else {
+                        $.toast({
+                            heading: 'Đơn hàng',
+                            text: response.message,
+                            position: 'top-right',
+                            icon: 'error'
+                        });
+                    }
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra, check code đi ba :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        })
+    </script>
+</body>
+
+</html>

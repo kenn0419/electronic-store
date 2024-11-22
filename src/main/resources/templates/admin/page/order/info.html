@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui" />
+    <meta name="description"
+        content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities." />
+    <meta name="keywords"
+        content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app" />
+    <meta name="author" content="PIXINVENT" />
+    <title>Order Info</title>
+
+    <th:block th:replace="~{admin/layout/css :: css}"></th:block>
+</head>
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover"
+    data-menu="horizontal-menu" data-col="">
+    <!-- BEGIN: Header-->
+    <th:block th:replace="~{admin/layout/header :: header}"></th:block>
+
+    <!-- BEGIN: Main Menu-->
+    <th:block th:replace="~{admin/layout/menu :: menu}"></th:block>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <section class="invoice-preview-wrapper">
+                    <div class="row invoice-preview">
+                        <div class="col-12">
+                            <div class="card invoice-preview-card">
+                                <div class="card-body invoice-padding pb-0">
+                                    <!-- Header starts -->
+                                    <div
+                                        class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                        <div>
+                                            <h4>
+                                                Order
+                                                <span class="invoice-number" th:text="@{'#' + ${order.id}}">#3492</span>
+                                            </h4>
+                                            <div class="invoice-date-wrapper">
+                                                <p class="invoice-date-title">Date Order:</p>
+                                                <p class="invoice-date"
+                                                    th:text="${#dates.format(order.orderDate, 'dd-MM-yyyy')}">25/08/2020
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="mt-md-0 mt-2">
+                                            <h4 class="card-text mb-25">Order Status</h4>
+                                            <p class="card-text mb-0 fw-bold text-primary"
+                                                th:text="${order.status.name}"></p>
+                                        </div>
+                                    </div>
+                                    <!-- Header ends -->
+                                </div>
+
+                                <hr class="invoice-spacing" />
+
+                                <!-- Address and Contact starts -->
+                                <div class="card-body invoice-padding pt-0">
+                                    <div class="row invoice-spacing">
+                                        <div class="col-xl-8 p-0">
+                                            <h6 class="mb-2">Invoice To:</h6>
+                                            <h6 class="mb-25" th:text="${order.receiverName}">Thomas shelby</h6>
+                                            <p class="card-text mb-25" th:text="${order.receiverAddress}">Small Heath,
+                                                B10
+                                                0HF, UK</p>
+                                            <p class="card-text mb-25" th:text="@{'(+84) ' + ${order.receiverPhone}}">
+                                            </p>
+                                            <p class="card-text mb-0" th:text="${order.receiverEmail}">
+                                                peakyFBlinders@gmail.com</p>
+                                        </div>
+                                        <div class="col-xl-4 p-0 mt-xl-0 mt-2">
+                                            <h6 class="mb-2">Payment Details:</h6>
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="pe-1">Total Price:</td>
+                                                        <td><span class="fw-bold"
+                                                                th:text="${#numbers.formatDecimal(order.totalPrice, 1, 'COMMA', -1, 'POINT')} + 'đ'">$12,110.55</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="pe-1">Payment Method:</td>
+                                                        <td>Thanh toán khi nhận hàng (COD)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="pe-1">Country:</td>
+                                                        <td>Việt Nam</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Address and Contact ends -->
+
+                                <!-- Invoice Description starts -->
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="py-1">Sản phẩm</th>
+                                                <th class="py-1">Price</th>
+                                                <th class="py-1">Quantity</th>
+                                                <th class="py-1">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="orderDetail : ${order.orderDetails}">
+                                                <td class="py-1">
+                                                    <p class="card-text fw-bold mb-25"
+                                                        th:text="${orderDetail.product.title}">Native App Development
+                                                    </p>
+                                                    <p class="card-text text-nowrap"
+                                                        th:text="${orderDetail.product.description}"
+                                                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 600px;">
+                                                        Developed a full stack native app using React Native, Bootstrap
+                                                        &
+                                                        Python
+                                                    </p>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold"
+                                                        th:text="${#numbers.formatDecimal(orderDetail.product.price, 1, 'COMMA', -1, 'POINT')} + 'đ'">$60.00</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold" th:text="${orderDetail.quantity}">30</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold"
+                                                        th:text="${#numbers.formatDecimal(orderDetail.product.price * orderDetail.quantity, 1, 'COMMA', -1, 'POINT')} + 'đ'">$1,800.00</span>
+                                                </td>
+                                            </tr>
+                                            <!-- <tr class="border-bottom">
+                                                <td class="py-1">
+                                                    <p class="card-text fw-bold mb-25">Ui Kit Design</p>
+                                                    <p class="card-text text-nowrap">Designed a UI kit for native app
+                                                        using
+                                                        Sketch, Figma & Adobe XD</p>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">$60.00</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">20</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">$1200.00</span>
+                                                </td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="card-body invoice-padding pb-0">
+                                    <div class="row invoice-sales-total-wrapper">
+                                        <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3 d-flex align-items-end">
+                                        </div>
+                                        <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
+                                            <div class="invoice-total-wrapper">
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Subtotal:</p>
+                                                    <p class="invoice-total-amount"
+                                                        th:text="${#numbers.formatDecimal(order.totalPrice, 1, 'COMMA', -1, 'POINT')} + 'đ'">
+                                                        $1800</p>
+                                                </div>
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Discount:</p>
+                                                    <p class="invoice-total-amount">0đ</p>
+                                                </div>
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Tax:</p>
+                                                    <p class="invoice-total-amount">0%</p>
+                                                </div>
+                                                <hr class="my-50" />
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Total:</p>
+                                                    <p class="invoice-total-amount"
+                                                        th:text="${#numbers.formatDecimal(order.totalPrice, 1, 'COMMA', -1, 'POINT')} + 'đ'">
+                                                        $1690</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Invoice Description ends -->
+
+                                <hr class="invoice-spacing" />
+
+                                <div class="card-body invoice-padding pt-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="fw-bold">Note:</span>
+                                            <span th:text="${order.note}">It was a pleasure working with you and your
+                                                team. We hope you will keep us in mind for future
+                                                freelance
+                                                projects. Thank You!</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body invoice-padding pt-0">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <a th:href="@{/admin/order}" class="btn btn-primary">Back To List</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{admin/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{admin/layout/js :: js}"></th:block>
+
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui" />
+    <meta name="description"
+        content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities." />
+    <meta name="keywords"
+        content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app" />
+    <meta name="author" content="PIXINVENT" />
+    <title>Manage User</title>
+
+    <th:block th:replace="~{admin/layout/css :: css}"></th:block>
+</head>
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover"
+    data-menu="horizontal-menu" data-col="">
+    <!-- BEGIN: Header-->
+    <th:block th:replace="~{admin/layout/header :: header}"></th:block>
+
+    <!-- BEGIN: Main Menu-->
+    <th:block th:replace="~{admin/layout/menu :: menu}"></th:block>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="row">
+                <div class="col-12 text-end mb-2">
+                    <a href="/admin/user/create" class="btn btn-outline-primary round waves-effect"><i
+                            class="fa-solid fa-plus"></i> Thêm Mới</a>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Danh Sách Sinh Viên</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle text-nowrap">#</th>
+                                        <th class="text-center align-middle text-nowrap">Full Name</th>
+                                        <th class="text-center align-middle text-nowrap">Email</th>
+                                        <th class="text-center align-middle text-nowrap">Address</th>
+                                        <th class="text-center align-middle text-nowrap">Avatar</th>
+                                        <th class="text-center align-middle text-nowrap">Tình Trạng</th>
+                                        <th class="text-center align-middle text-nowrap">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user : ${users}">
+                                        <th class="text-center align-middle text-nowrap" th:text="${user.id}"></th>
+                                        <td class=" align-middle text-nowrap" th:text="${user.fullName}">Trần Văn Quốc
+                                            Bảo</td>
+                                        <td class=" align-middle text-nowrap" th:text="${user.email}">tranb@gmail.com
+                                        </td>
+                                        <td class=" align-middle text-nowrap" th:text="${user.address}">Đà Nẵng</td>
+                                        <td class=" align-middle text-nowrap">
+                                            <img th:src="@{/images/avatar/{avatar}(avatar=${user.avatar})}" alt="test"
+                                                style="width: 100px; height: 70px;">
+                                        </td>
+                                        <td class=" align-middle text-nowrap text-center">
+                                            <a th:if="${user.status}"
+                                                th:href="@{/admin/user/change-status/{id}(id=${user.id})}"
+                                                class="btn btn-primary">Hoạt động</a>
+                                            <a th:unless="${user.status}"
+                                                th:href="@{/admin/user/change-status/{id}(id=${user.id})}"
+                                                class="btn btn-warning">Bị khoá</a>
+                                        </td>
+                                        <td class=" align-middle text-nowrap text-center">
+                                            <a th:href="@{/admin/user/update/{id}(id=${user.id})}"
+                                                class="btn btn-info">Update</a>
+                                            <a th:href="@{/admin/user/delete/{id}(id=${user.id})}"
+                                                class="btn btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Content-->
+
+        <th:block th:replace="~{admin/layout/footer :: footer}"></th:block>
+
+        <th:block th:replace="~{admin/layout/js :: js}"></th:block>
+
+</body>
+
+</html>

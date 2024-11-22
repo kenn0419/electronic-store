@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <th:block th:replace="~{client/layout/css :: css}"></th:block>
+    <title>Your Cart</title>
+</head>
+
+<body>
+    <th:block th:replace="~{client/layout/header :: header}"></th:block>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Cart</h1>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="untree_co-section before-footer-section">
+        <div class="container">
+            <div class="row mb-5">
+                <form class="col-md-12" method="post">
+                    <div class="site-blocks-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="product-thumbnail">Image</th>
+                                    <th class="product-name">Product</th>
+                                    <th class="product-price">Price</th>
+                                    <th class="product-quantity">Quantity</th>
+                                    <th class="product-total">Total</th>
+                                    <th class="product-remove">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody th:if="${cart != null}">
+                                <tr th:each="cartDetail, iStat : ${cart.cartDetails}">
+                                    <td class="product-thumbnail">
+                                        <img th:src="@{/images/product/{thumbnail}(thumbnail=${cartDetail.product.thumbnail})}"
+                                            alt="Image" class="img-fluid">
+                                    </td>
+                                    <td class="product-name">
+                                        <h2 class="h5 text-black" th:text="${cartDetail.product.title}">
+                                            Product 1</h2>
+                                    </td>
+                                    <td id="price"
+                                        th:text="${#numbers.formatDecimal(cartDetail.product.price, 1, 'COMMA', -1, 'POINT')} + 'đ'">
+                                        $49.00</td>
+                                    <td>
+                                        <div class="input-group mb-3 d-flex align-items-center quantity-container"
+                                            style="max-width: 120px; margin: 0 auto;">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-outline-black decrease"
+                                                    type="button">&minus;</button>
+                                            </div>
+                                            <input type="text"
+                                                class="form-control text-center quantity-amount bg-transparent"
+                                                th:value="${cartDetail.quantity}" min="1" readonly
+                                                aria-label="Example text with button addon"
+                                                aria-describedby="button-addon1"
+                                                th:data-cart-detail-id="${cartDetail.id}"
+                                                th:data-cart-detail-price="${cartDetail.price}"
+                                                th:data-cart-detail-index="${iStat.index}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-black increase"
+                                                    type="button">&plus;</button>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    <td class="total-price" th:data-cart-detail-index="${iStat.index}"
+                                        th:data-cart-detail-quantity="${cartDetail.quantity}"
+                                        th:data-cart-detail-price="${cartDetail.price}"
+                                        th:text="${#numbers.formatDecimal(cartDetail.product.price * cartDetail.quantity, 1, 'COMMA', -1, 'POINT')} + 'đ'">
+                                        $49.00
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-black btn-sm" id="remove-product"
+                                            th:data-cart-detail-id="${cartDetail.id}">
+                                            <i class="fa-regular fa-circle-xmark fa-2x"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody th:unless="${cart != null}">
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <h2 th:text="${emptyCart}">Giỏ hàng trống</h2>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <a href="/products" class="btn btn-outline-black btn-sm btn-block">Continue Shopping</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${cart != null}" class="col-md-6 pl-5">
+                    <div class="row justify-content-end">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12 text-right border-bottom mb-5">
+                                    <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <span class="text-black">Shipping fee</span>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <strong class="text-black">0đ</strong>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <span class="text-black">Total</span>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <strong class="text-black" id="total-cart"
+                                        th:text="${#numbers.formatDecimal(totalPriceCart, 1, 'COMMA', -1, 'POINT')} + 'đ'">$230.00</strong>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 text-end">
+                                    <form th:action="@{/confirm-checkout}" method="post" th:object="${cart}">
+                                        <div style="display: none;" th:each="cartDetail, iStat : ${cart.cartDetails}">
+                                            <div class="mb-3">
+                                                <div class="form-group">
+                                                    <label for="">Id:</label>
+                                                    <input class="form-control"
+                                                        th:field="*{cartDetails[__${iStat.index}__].id}" />
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-group">
+                                                    <label for="">Quantity:</label>
+                                                    <input class="form-control"
+                                                        th:field="*{cartDetails[__${iStat.index}__].quantity}" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{client/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{client/layout/js :: js}"></th:block>
+
+    <script>
+        function isLogin() {
+            const navbarElement = $('.navbar-collapse');
+            const loginChildElement = navbarElement.find('a.login');
+            if (loginChildElement.length > 0) {
+                return false;
+            }
+            return true;
+        }
+        $('button#remove-product').click(function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Lỗi thao tác',
+                    text: 'Bạn cần đăng nhập tài khoản để thêm sản phẩm vào giỏ hàng',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
+            const cartDetailId = $(this).attr('data-cart-detail-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            $.ajax({
+                url: `${window.location.origin}/api/delete-from-cart-product/${cartDetailId}`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                contentType: "application/json",
+
+                success: function (response) {
+                    const sum = +response;
+                    $("#sumCart").text(sum)
+                    //show message
+                    $.toast({
+                        heading: 'Giỏ hàng',
+                        text: 'Xoá sản phẩm khỏi giỏ hàng thành công',
+                        position: 'top-right',
+
+                    })
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra, check code đi ba :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        })
+    </script>
+</body>
+
+</html>

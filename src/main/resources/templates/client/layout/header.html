@@ -1,0 +1,76 @@
+<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar"
+    th:fragment="header">
+
+    <div class="container">
+        <a class="navbar-brand" href="/">Electro<span>.</span></a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+            aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsFurni">
+            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li><a class="nav-link" href="/products">Products</a></li>
+                <li><a class="nav-link" href="/about">About us</a></li>
+                <li><a class="nav-link" href="/contact">Contact us</a></li>
+            </ul>
+
+            <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5 align-items-md-center"
+                sec:authorize="isAuthenticated()">
+                <li>
+                    <a class="nav-link" href="/cart" style="position: relative;">
+                        <img src="/images/client/cart.svg">
+                        <span class="badge rounded-pill bg-primary badge-up cart-item-count" id="sumCart"
+                            th:text="${session.sum}">6</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/wishlist">
+                        <img style="width: 23px; height: 23px;" src="/images/client/heart.svg">
+                    </a>
+                </li>
+                <li class="nav-item dropdown dropdown-user">
+                    <a class="nav-link dropdown-toggle dropdown-user-link d-flex align-items-center gap-1"
+                        id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <div class="user-nav d-sm-flex d-none flex-column">
+                            <span class="user-name fw-bolder" th:text="${session.fullName}">John Doe</span>
+                        </div>
+                        <span class="avatar"><img class="rounded-circle"
+                                th:src="@{/images/avatar/{avatar}(avatar=${session.avatar})}" alt="avatar" height="40"
+                                width="40" /><span class="avatar-status-online"></span></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
+                        <a class="dropdown-item" href="/manage-account">
+                            <i class="me-50" data-feather="user"></i>
+                            Profile
+                        </a>
+                        <a class="dropdown-item" href="/admin" th:if="${session.role == 'ADMIN'}">
+                            <i class="me-50" data-feather="user"></i>
+                            Admin
+                        </a>
+                        <a class="dropdown-item" href="/your-order">
+                            <i class="me-50" data-feather="message-square"></i>
+                            Orders
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <form action="#" th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" href="/logout">
+                                <i class="me-50" data-feather="power"></i>
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+
+            <a sec:authorize="!isAuthenticated()" href="/login" class="btn btn-white-outline login"
+                style="font-size: 14px; padding: 8px 20px;">Login</a>
+        </div>
+    </div>
+
+</nav>

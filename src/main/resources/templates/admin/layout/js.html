@@ -1,0 +1,34 @@
+<th:block th:fragment="js">
+    <!-- BEGIN: Vendor JS-->
+    <script th:src="@{/app-assets/vendors/js/vendors.min.js}"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script th:src="@{/app-assets/vendors/js/ui/jquery.sticky.js}"></script>
+    <script th:src="@{/app-assets/vendors/js/charts/apexcharts.min.js}"></script>
+    <!-- <script th:src="@{/app-assets/vendors/js/extensions/toastr.min.js}"></script> -->
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script th:src="@{/app-assets/js/core/app-menu.min.js}"></script>
+    <script th:src="@{/app-assets/js/core/app.min.js}"></script>
+    <!-- <script th:src="@{/app-assets/js/scripts/customizer.min.js}"></script> -->
+    <!-- END: Theme JS-->
+
+    <script th:src="@{/app-assets/js/scripts/pages/app-invoice.js}"></script>
+
+    <!-- BEGIN: Page JS-->
+    <!-- <script th:src="@{/app-assets/js/scripts/pages/dashboard-ecommerce.min.js}"></script> -->
+    <!-- END: Page JS-->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script> -->
+
+    <script>
+        $(window).on("load", function () {
+            if (feather) {
+                feather.replace({ width: 14, height: 14 });
+            }
+        });
+    </script>
+</th:block>

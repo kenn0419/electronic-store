@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui" />
+    <meta name="description"
+        content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities." />
+    <meta name="keywords"
+        content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app" />
+    <meta name="author" content="PIXINVENT" />
+    <title>Create Product</title>
+
+    <th:block th:replace="~{admin/layout/css :: css}"></th:block>
+</head>
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover"
+    data-menu="horizontal-menu" data-col="">
+    <!-- BEGIN: Header-->
+    <th:block th:replace="~{admin/layout/header :: header}"></th:block>
+
+    <!-- BEGIN: Main Menu-->
+    <th:block th:replace="~{admin/layout/menu :: menu}"></th:block>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-1">
+            <div class="row">
+                <div class="card py-2">
+                    <div class="card-header">
+                        <h2 class="fw-bolder">Tạo Product</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" th:action="@{/admin/product/create}" th:object="${newProduct}" method="post"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="mt-2">Title</label>
+                                    <input type="text" class="form-control" placeholder="Title..."
+                                        th:field="${newProduct.title}">
+                                    <p th:if="${#fields.hasErrors('title')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.title}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Price</label>
+                                    <input type="text" class="form-control" placeholder="Price..."
+                                        th:field="${newProduct.price}">
+                                    <p th:if="${#fields.hasErrors('price')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.price}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Stock</label>
+                                    <input type="text" class="form-control" placeholder="Stock..."
+                                        th:field="${newProduct.stock}">
+                                    <p th:if="${#fields.hasErrors('stock')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.stock}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="mt-2">Category</label>
+                                    <select class="form-select" th:field="${newProduct.categoryId}">
+                                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                            th:text="${category.name}"
+                                            th:selected="${category.id} == ${newProduct.categoryId}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Status</label>
+                                    <select class="form-select" th:field="${newProduct.status}">
+                                        <option value="true">Đang hoạt động</option>
+                                        <option value="false">Bị khoá</option>
+                                    </select>
+                                    <p th:if="${#fields.hasErrors('status')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.status}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Manufactor</label>
+                                    <input type="text" class="form-control" placeholder="Manufactor..."
+                                        th:field="${newProduct.manufactor}">
+                                    <p th:if="${#fields.hasErrors('manufactor')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.manufactor}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="" class="mt-2">Thumbnail</label>
+                                    <input class="form-control" type="file" th:field="${newProduct.thumbnail}" />
+                                    <p th:if="${#fields.hasErrors('thumbnail')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.thumbnail}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="" class="mt-2">Description</label>
+                                    <textarea th:field="${newProduct.description}" rows="4"
+                                        class="form-control"></textarea>
+                                    <p th:if="${#fields.hasErrors('description')}" th:errorclass="text-danger"
+                                        th:errors="${newProduct.description}"></p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <a href="/admin/product" class="btn btn-outline-primary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Content-->
+
+        <th:block th:replace="~{admin/layout/footer :: footer}"></th:block>
+
+        <th:block th:replace="~{admin/layout/js :: js}"></th:block>
+
+</body>
+
+</html>

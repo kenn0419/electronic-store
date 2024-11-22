@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+
+    <th:block th:replace="~{client/layout/css :: css}"></th:block>
+    <title>Your Checkout</title>
+</head>
+
+<body>
+    <th:block th:replace="~{client/layout/header :: header}"></th:block>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Checkout</h1>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="untree_co-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 ">
+                    <!-- <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+                            <div class="p-3 p-lg-5 border bg-white rounded">
+
+                                <label for="c_code" class="text-black mb-3">Enter your coupon code if you have
+                                    one</label>
+                                <div class="input-group w-75 couponcode-wrap">
+                                    <input type="text" class="form-control me-2" id="c_code" placeholder="Coupon Code"
+                                        aria-label="Coupon Code" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-black btn-sm" type="button"
+                                            id="button-addon2">Apply</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h2 class="h3 mb-3 text-black">Your Order</h2>
+                            <div class="p-3 p-lg-5 border bg-white rounded">
+                                <table class="table site-block-order-table mb-5">
+                                    <thead>
+                                        <th>Product</th>
+                                        <th>Total</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="cartDetail : ${cart.cartDetails}" class="products">
+                                            <td class="d-flex">
+                                                <span class="w-75" th:text="${cartDetail.product.title}"></span>
+                                                <strong class="mx-2">x</strong>
+                                                <span class="product-quantity" th:text="${cartDetail.quantity}"></span>
+                                            </td>
+                                            <td class="product-price text-end"
+                                                th:data-cart-detail-price="${cartDetail.product.price}"
+                                                th:text="${#numbers.formatDecimal(cartDetail.product.price * cartDetail.quantity, 1, 'COMMA', -1, 'POINT')} + 'đ'">
+                                                $250.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                                            <td class="text-black font-weight-bold text-end"><strong
+                                                    id="total-price">$350.00</strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="border p-3 mb-3">
+                                    <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
+                                            href="#collapsebank" role="button" aria-expanded="false"
+                                            aria-controls="collapsebank">Direct Bank
+                                            Transfer</a></h3>
+
+                                    <div class="collapse" id="collapsebank">
+                                        <div class="py-2">
+                                            <p class="mb-0">Make your payment directly into our bank account. Please use
+                                                your Order ID as the payment reference. Your order won’t be shipped
+                                                until
+                                                the funds have cleared in our account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border p-3 mb-3">
+                                    <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
+                                            href="#collapsecheque" role="button" aria-expanded="false"
+                                            aria-controls="collapsecheque">Cheque
+                                            Payment</a></h3>
+
+                                    <div class="collapse" id="collapsecheque">
+                                        <div class="py-2">
+                                            <p class="mb-0">Make your payment directly into our bank account. Please use
+                                                your Order ID as the payment reference. Your order won’t be shipped
+                                                until
+                                                the funds have cleared in our account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border p-3 mb-5">
+                                    <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
+                                            href="#collapsepaypal" role="button" aria-expanded="false"
+                                            aria-controls="collapsepaypal">Paypal</a>
+                                    </h3>
+
+                                    <div class="collapse" id="collapsepaypal">
+                                        <div class="py-2">
+                                            <p class="mb-0">Make your payment directly into our bank account. Please use
+                                                your Order ID as the payment reference. Your order won’t be shipped
+                                                until
+                                                the funds have cleared in our account.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6 mb-5 mb-md-0">
+                    <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                    <div class="p-3 p-lg-5 border bg-white rounded">
+                        <form action="#" th:action="@{/checkout}" method="post" th:object="${order}">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label for="c_fname" class="text-black">First Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="c_fname" name="c_fname"
+                                        th:field="${order.firstname}">
+                                    <p th:if="${#fields.hasErrors('firstname')}" th:errorclass="text-danger"
+                                        th:errors="${order.firstname}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="c_lname" class="text-black">Last Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="c_lname" name="c_lname"
+                                        th:field="${order.lastname}">
+                                    <p th:if="${#fields.hasErrors('lastname')}" th:errorclass="text-danger"
+                                        th:errors="${order.lastname}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label for="c_address" class="text-black">Address <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="c_address" name="c_address"
+                                        placeholder="Street address" th:field="${order.receiverAddress}">
+                                    <p th:if="${#fields.hasErrors('receiverAddress')}" th:errorclass="text-danger"
+                                        th:errors="${order.receiverAddress}"></p>
+                                </div>
+                            </div>
+                            <div class="form-group row mt-3">
+                                <div class="col-md-6">
+                                    <label for="c_email_address" class="text-black">Email Address <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="c_email_address" name="c_email_address"
+                                        placeholder="adon@gmail.com" th:field="${order.receiverEmail}">
+                                    <p th:if="${#fields.hasErrors('receiverEmail')}" th:errorclass="text-danger"
+                                        th:errors="${order.receiverEmail}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="c_phone" class="text-black">Phone <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="c_phone" name="c_phone"
+                                        placeholder="Phone Number" th:field="${order.receiverPhone}">
+                                    <p th:if="${#fields.hasErrors('receiverPhone')}" th:errorclass="text-danger"
+                                        th:errors="${order.receiverPhone}"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="c_order_notes" class="text-black">Order Notes</label>
+                                <textarea name="c_order_notes" id="c_order_notes" cols="30" rows="5"
+                                    class="form-control" placeholder="Write your notes here..."
+                                    th:field="${order.note}"></textarea>
+                            </div>
+
+                            <div class="form-group text-end mt-3">
+                                <button class="btn btn-black btn-lg py-3 btn-block" type="submit">Place
+                                    Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <!-- </form> -->
+        </div>
+    </div>
+
+    <th:block th:replace="~{client/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{client/layout/js :: js}"></th:block>
+
+    <script>
+        $(document).ready(function () {
+            var products = $('.products');
+
+            calculateTotalPrice();
+
+            function calculateTotalPrice() {
+                let total = 0;
+                const productRows = document.querySelectorAll('.products');
+
+                productRows.forEach(row => {
+                    const price = parseFloat(row.querySelector('.product-price').getAttribute('data-cart-detail-price'));
+                    const quantity = parseInt(row.querySelector('.product-quantity').innerText);
+                    total += price * quantity;
+                });
+
+                // Format the total and display it
+                document.getElementById('total-price').innerText = formatCurrency(total);
+            }
+
+            function formatCurrency(value) {
+                const formatter = new Intl.NumberFormat('vi-VN', {
+                    style: 'decimal',
+                    minimumFractionDigits: 0,
+                });
+
+                let formatted = formatter.format(value);
+
+                formatted = formatted.replace(/\./g, ',');
+                formatted += "đ";
+                return formatted;
+            }
+        });
+    </script>
+</body>
+
+</html>

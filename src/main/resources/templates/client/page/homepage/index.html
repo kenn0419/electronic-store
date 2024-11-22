@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <th:block th:replace="~{client/layout/css :: css}"></th:block>
+    <title>electronicstore Store</title>
+</head>
+
+<body>
+
+    <!-- Start Header/Navigation -->
+    <th:block th:replace="~{client/layout/header :: header}"></th:block>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Cutting-Edge <span clsas="d-block">Tech Solutions</span></h1>
+                        <p class="mb-4">Experience cutting-edge technology with our selection of high-performance
+                            electronicstores tailored for modern life.</p>
+                        <p><a href="#" class="btn btn-secondary me-2">Shop Now</a><a href="/products"
+                                class="btn btn-white-outline">Explore</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="hero-img-wrap">
+                        <img src="/images/client/banner.png" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-section">
+        <div class="container">
+            <div class="row">
+                <!-- Start Column 1 -->
+                <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                    <h2 class="mb-4 section-title">Built with advanced technology. </h2>
+                    <p class="mb-4">Built with advanced technology.
+                        Find the best gadgets to enhance your daily life. Discover cutting-edge laptops, phones, and
+                        accessories.</p>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0" th:each="product, iterStat : ${products}"
+                    th:if="${iterStat.count <= 3}">
+                    <a class="product-item" th:href="@{/product/{id}(id=${product.id})}">
+                        <img th:src="@{/images/product/{thumbnail}(thumbnail=${product.thumbnail})}"
+                            class="img-fluid product-thumbnail">
+                        <h3 class="product-title" th:text="${product.title}">Product Name</h3>
+                        <strong class="product-price"
+                            th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', -1, 'POINT')} + 'đ'">$0.00</strong>
+                        <span class="icon-cross" th:data-product-id="${product.id}">
+                            <img src="images/client/cross.svg" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="we-help-section">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-7 mb-5 mb-lg-0">
+                    <div class="imgs-grid">
+                        <div class="grid grid-1"><img th:src="@{images/client/main-img.jpg}" alt="Untree.co"></div>
+                        <div class="grid grid-2"><img th:src="@{images/client/air-pod.png}" alt="Untree.co"></div>
+                        <div class="grid grid-3"><img th:src="@{images/client/lenovo.jpg}" alt="Untree.co"></div>
+                    </div>
+                </div>
+                <div class="col-lg-5 ps-lg-5">
+                    <h2 class="section-title mb-4">We Help You Find the Best electronicstore Devices</h2>
+                    <p>Discover top-quality electronicstore gadgets for your everyday needs. From the latest smartphones and
+                        laptops to cutting-edge
+                        accessories, we have everything to enhance your digital life. Experience innovation and
+                        performance with our carefully
+                        curated collection.</p>
+
+                    <ul class="list-unstyled custom-list my-4">
+                        <li>Latest technology and innovative designs</li>
+                        <li>High-performance gadgets for work and leisure</li>
+                        <li>Competitive prices and exclusive deals</li>
+                        <li>Friendly customer support to guide your purchase</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{client/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{client/layout/js :: js}"></th:block>
+    <script>
+        function isLogin() {
+            const navbarElement = $('.navbar-collapse');
+            const loginChildElement = navbarElement.find('a.login');
+            if (loginChildElement.length > 0) {
+                return false;
+            }
+            return true;
+        }
+        $('span.icon-cross').click(function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Lỗi thao tác',
+                    text: 'Bạn cần đăng nhập tài khoản để thêm sản phẩm vào giỏ hàng',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
+            const productId = $(this).attr('data-product-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const quantity = 1;
+            $.ajax({
+                url: `${window.location.origin}/api/add-to-cart`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                data: JSON.stringify({ quantity: quantity, productId: productId }),
+                contentType: "application/json",
+
+                success: function (response) {
+                    const sum = +response;
+                    //update cart
+                    $("#sumCart").text(sum)
+                    //show message
+                    $.toast({
+                        heading: 'Giỏ hàng',
+                        text: 'Thêm sản phẩm vào giỏ hàng thành công',
+                        position: 'top-right',
+
+                    })
+
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra, check code đi ba :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>

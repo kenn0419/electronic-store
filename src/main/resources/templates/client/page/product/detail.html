@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <th:block th:replace="~{client/layout/css :: css}"></th:block>
+    <title>Detail Product</title>
+    <style>
+        .main-content {
+            margin-top: 50px;
+            margin-bottom: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <th:block th:replace="~{client/layout/header :: header}"></th:block>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Detail Product</h1>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="container">
+            <div class="row my-2">
+                <div class="col-12 col-md-5 d-flex align-items-center justify-content-center mb-2 mb-md-0">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img th:src="@{/images/product/{thumbnail}(thumbnail=${product.thumbnail})}"
+                            class="img-fluid product-img" alt="product image">
+                    </div>
+                </div>
+                <div class="col-12 col-md-7 mb-5">
+                    <h4 th:text="${product.title}">Apple Watch Series 5</h4>
+                    <span class="card-text item-company" th:text="'By ' + ${product.manufactor}">By Apple</span>
+                    <div class="ecommerce-details-price d-flex flex-wrap mt-1">
+                        <h4 class="item-price me-1"
+                            th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', -1, 'POINT')} + 'đ'">$499.99
+                        </h4>
+                    </div>
+                    <p class="card-text">Available - <span class="text-success"> <span class="fw-bold stock-quantity"
+                                th:text="${product.stock}"></span> In stock</span></p>
+                    <p class="card-text" th:text="${product.description}">
+                        GPS, Always-On Retina display, 30% larger screen, Swimproof, ECG app, Electrical and
+                        optical heart
+                        sensors,
+                        Built-in compass, Elevation, Emergency SOS, Fall Detection, S5 SiP with up to 2x faster
+                        64-bit
+                        dual-core
+                        processor, watchOS 6 with Activity trends, cycle tracking, hearing health innovations,
+                        and the App
+                        Store on
+                        your wrist
+                    </p>
+                    <ul class="product-features list-unstyled">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-shopping-cart">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
+                                </path>
+                            </svg> <span>Free Shipping</span></li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-dollar-sign">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <span>EMI options available</span>
+                        </li>
+                    </ul>
+                    <div class="input-group mb-3 d-flex align-items-center gap-3" style="max-width: 250px;">
+                        <svg fill="#3B5D50" width="30px" height="30px" viewBox="0 0 1024 1024" style="cursor: pointer;"
+                            onclick="decreaseQuantity()" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M512 0c283 0 512 229 512 512s-229 512-512 512S0 795 0 512 229 0 512 0zm0 961c247 0 448-202 448-449S759 64 512 64 64 265 64 512s201 449 448 449zm-35-417H288c-18 0-32-14-32-32s14-32 32-32h448c18 0 32 14 32 32s-14 32-32 32H477z" />
+                        </svg>
+
+                        <input type="text" class="form-control text-center"
+                            style="outline: none; background-color: transparent; border-radius: 30px; height: 40px;"
+                            id="quantity-input" value="1" min="1" readonly>
+                        <svg fill="#3B5D50" width="30px" height="30px" viewBox="0 0 1024 1024" style="cursor: pointer;"
+                            onclick="increaseQuantity()" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M512 0C229.232 0 0 229.232 0 512c0 282.784 229.232 512 512 512 282.784 0 512-229.216 512-512C1024 229.232 794.784 0 512 0zm0 961.008c-247.024 0-448-201.984-448-449.01 0-247.024 200.976-448 448-448s448 200.977 448 448-200.976 449.01-448 449.01zM736 480H544V288c0-17.664-14.336-32-32-32s-32 14.336-32 32v192H288c-17.664 0-32 14.336-32 32s14.336 32 32 32h192v192c0 17.664 14.336 32 32 32s32-14.336 32-32V544h192c17.664 0 32-14.336 32-32s-14.336-32-32-32z" />
+                        </svg>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column flex-sm-row pt-1">
+                        <a href="#" th:data-product-id="${product.id}"
+                            class="btn btn-primary btn-cart me-0 me-sm-1 mb-1 mb-sm-0 waves-effect waves-float waves-light">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-shopping-cart me-50">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6">
+                                </path>
+                            </svg>
+                            <span class="add-to-cart">Add to cart</span>
+                        </a>
+                        <a href="#"
+                            class="btn btn-outline-secondary btn-wishlist me-0 me-sm-1 mb-1 mb-sm-0 waves-effect">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-heart me-50">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
+                            <span>Wishlist</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="item-features mt-5">
+                    <div class="row text-center">
+                        <div class="col-12 col-md-4 mb-4 mb-md-0">
+                            <div class="w-75 mx-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-award">
+                                    <circle cx="12" cy="8" r="7"></circle>
+                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                </svg>
+                                <h4 class="mt-2 mb-1">100% Original</h4>
+                                <p class="card-text">All our products are genuine and sourced directly from trusted
+                                    brands. Smartphones, laptops, and accessories.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 mb-4 mb-md-0">
+                            <div class="w-75 mx-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-clock">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <h4 class="mt-2 mb-1">10 Day Replacement</h4>
+                                <p class="card-text">If there's any defect, enjoy a hassle-free replacement within 10
+                                    days. Headphones, chargers, and more.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 mb-4 mb-md-0">
+                            <div class="w-75 mx-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-shield">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <h4 class="mt-2 mb-1">1 Year Warranty</h4>
+                                <p class="card-text">We offer a 1-year warranty on select items to ensure your devices
+                                    keep performing. Tablets, cameras, and other
+                                    electronicstores.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{client/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{client/layout/js :: js}"></th:block>
+    <script>
+        // Function to increase the quantity
+        function increaseQuantity() {
+            let stockQuantity = document.querySelector('.stock-quantity').innerText * 1;
+            let quantityInput = document.getElementById('quantity-input');
+            let currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity < stockQuantity * 1) {
+                quantityInput.value = currentQuantity + 1;
+            } else {
+                $.toast({
+                    heading: 'Lỗi thao tác',
+                    text: 'Đã đạt tối đa số lượng sản phẩm có thể chọn',
+                    position: 'top-right',
+                    icon: 'warning'
+                });
+            }
+
+        }
+
+        // Function to decrease the quantity
+        function decreaseQuantity() {
+            let quantityInput = document.getElementById('quantity-input');
+            let currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity > 1) { // Ensures quantity doesn't go below 1
+                quantityInput.value = currentQuantity - 1;
+            }
+        }
+
+        function isLogin() {
+            const navbarElement = $('.navbar-collapse');
+            const loginChildElement = navbarElement.find('a.login');
+            if (loginChildElement.length > 0) {
+                return false;
+            }
+            return true;
+        }
+
+        const addToCartButton = $('span.add-to-cart').parent();
+        addToCartButton.click(function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Lỗi thao tác',
+                    text: 'Bạn cần đăng nhập tài khoản để thêm sản phẩm vào giỏ hàng',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
+            const productId = $(this).attr('data-product-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const quantity = $('#quantity-input').val();
+            console.log(quantity)
+            $.ajax({
+                url: `${window.location.origin}/api/add-to-cart`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                data: JSON.stringify({ quantity: quantity, productId: productId }),
+                contentType: "application/json",
+
+                success: function (response) {
+                    const sum = +response;
+                    //update cart
+                    $("#sumCart").text(sum)
+                    //show message
+                    $.toast({
+                        heading: 'Giỏ hàng',
+                        text: 'Thêm sản phẩm vào giỏ hàng thành công',
+                        position: 'top-right',
+
+                    })
+
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra, check code đi ba :v")
+                    console.log("error: ", response);
+                }
+
+            });
+
+        })
+    </script>
+</body>
+
+</html>

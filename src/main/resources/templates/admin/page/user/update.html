@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui" />
+    <meta name="description"
+        content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities." />
+    <meta name="keywords"
+        content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app" />
+    <meta name="author" content="PIXINVENT" />
+    <title>Update User</title>
+
+    <th:block th:replace="~{admin/layout/css :: css}"></th:block>
+</head>
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover"
+    data-menu="horizontal-menu" data-col="">
+    <!-- BEGIN: Header-->
+    <th:block th:replace="~{admin/layout/header :: header}"></th:block>
+
+    <!-- BEGIN: Main Menu-->
+    <th:block th:replace="~{admin/layout/menu :: menu}"></th:block>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-1">
+            <div class="row">
+                <div class="card py-2">
+                    <div class="card-header">
+                        <h2 class="fw-bolder">Cập nhật User</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" th:action="@{/admin/user/update}" th:object="${updateUser}" method="post"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-4" style="display: none;">
+                                    <label class="mt-2">Id</label>
+                                    <input readonly type="text" class="form-control" placeholder="Id..."
+                                        th:value="${user.id}" name="id">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Full Name</label>
+                                    <input type="text" class="form-control" placeholder="Full name..."
+                                        th:field="${updateUser.fullName}">
+                                    <p th:if="${#fields.hasErrors('fullName')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.fullName}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Email</label>
+                                    <input type="text" class="form-control" placeholder="Email..."
+                                        th:field="${updateUser.email}">
+                                    <p th:if="${#fields.hasErrors('email')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.email}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Address</label>
+                                    <input type="text" class="form-control" placeholder="Address..."
+                                        th:field="${updateUser.address}">
+                                    <p th:if="${#fields.hasErrors('address')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.address}"></p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    <label class="mt-2">Password</label>
+                                    <input readonly type="text" class="form-control" placeholder="Password..."
+                                        th:field="${updateUser.password}">
+                                    <p th:if="${#fields.hasErrors('password')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.password}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Status</label>
+                                    <select class="form-select" th:field="${updateUser.status}">
+                                        <option value="true">Đang hoạt động</option>
+                                        <option value="false">Bị khoá</option>
+                                    </select>
+                                    <p th:if="${#fields.hasErrors('status')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.status}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Role</label>
+                                    <select class="form-select" th:field="${updateUser.role.id}">
+                                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}">
+                                        </option>
+                                    </select>
+                                    <p th:if="${#fields.hasErrors('role')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.role}"></p>
+                                </div>
+                            </div>
+                            <div class="row flex-column">
+                                <div class="col-md-4">
+                                    <img th:src="@{'/images/avatar/' + ${user.avatar}}" alt="Avatar" width="150">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="" class="mt-2">Avatar</label>
+                                    <input class="form-control" type="file" th:field="${updateUser.avatar}" />
+                                    <p th:if="${#fields.hasErrors('avatar')}" th:errorclass="text-danger"
+                                        th:errors="${updateUser.avatar}"></p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <a href="/admin/user" class="btn btn-outline-primary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Content-->
+
+        <th:block th:replace="~{admin/layout/footer :: footer}"></th:block>
+
+        <th:block th:replace="~{admin/layout/js :: js}"></th:block>
+
+</body>
+
+</html>

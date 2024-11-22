@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <th:block th:replace="~{client/layout/css :: css}"></th:block>
+    <title>Products</title>
+</head>
+
+<body>
+    <th:block th:replace="~{client/layout/header :: header}"></th:block>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Products</h1>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="untree_co-section product-section before-footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4 col-lg-3 mb-5" th:each="product : ${products}">
+                    <a class="product-item" href="#" th:href="@{/product/{id}(id=${product.id})}">
+                        <img th:src="@{/images/product/{thumbnail}(thumbnail=${product.thumbnail})}"
+                            class="img-fluid product-thumbnail">
+                        <h3 class="product-title" th:text="${product.title}">Nordic Chair</h3>
+                        <strong class="product-price"
+                            th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', -1, 'POINT')} + 'đ'">$50.00</strong>
+
+                        <span class="icon-cross" th:data-product-id="${product.id}">
+                            <img th:src="@{images/client/cross.svg}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{client/layout/footer :: footer}"></th:block>
+
+    <th:block th:replace="~{client/layout/js :: js}"></th:block>
+    <script>
+        function isLogin() {
+            const navbarElement = $('.navbar-collapse');
+            const loginChildElement = navbarElement.find('a.login');
+            if (loginChildElement.length > 0) {
+                return false;
+            }
+            return true;
+        }
+        $('span.icon-cross').click(function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            if (!isLogin()) {
+                $.toast({
+                    heading: 'Lỗi thao tác',
+                    text: 'Bạn cần đăng nhập tài khoản để thêm sản phẩm vào giỏ hàng',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+                return;
+            }
+            const productId = $(this).attr('data-product-id');
+            const token = $("meta[name='_csrf']").attr("content");
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const quantity = 1;
+            $.ajax({
+                url: `${window.location.origin}/api/add-to-cart`,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                type: "POST",
+                data: JSON.stringify({ quantity: quantity, productId: productId }),
+                contentType: "application/json",
+
+                success: function (response) {
+                    const sum = +response;
+                    //update cart
+                    $("#sumCart").text(sum)
+                    //show message
+                    $.toast({
+                        heading: 'Giỏ hàng',
+                        text: 'Thêm sản phẩm vào giỏ hàng thành công',
+                        position: 'top-right',
+
+                    })
+
+                },
+                error: function (response) {
+                    alert("có lỗi xảy ra, check code đi ba :v")
+                    console.log("error: ", response);
+                }
+
+            });
+        })
+    </script>
+</body>
+
+</html>

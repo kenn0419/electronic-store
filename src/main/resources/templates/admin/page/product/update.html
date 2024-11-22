@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui" />
+    <meta name="description"
+        content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities." />
+    <meta name="keywords"
+        content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app" />
+    <meta name="author" content="PIXINVENT" />
+    <title>Update Product</title>
+
+    <th:block th:replace="~{admin/layout/css :: css}"></th:block>
+</head>
+
+<body class="horizontal-layout horizontal-menu navbar-floating footer-static" data-open="hover"
+    data-menu="horizontal-menu" data-col="">
+    <!-- BEGIN: Header-->
+    <th:block th:replace="~{admin/layout/header :: header}"></th:block>
+
+    <!-- BEGIN: Main Menu-->
+    <th:block th:replace="~{admin/layout/menu :: menu}"></th:block>
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-1">
+            <div class="row">
+                <div class="card py-2">
+                    <div class="card-header">
+                        <h2 class="fw-bolder">Update Product</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="#" th:action="@{/admin/product/update}" th:object="${updateProduct}" method="post"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-4" style="display: none;">
+                                    <label class="mt-2">Id</label>
+                                    <input readonly type="text" class="form-control" placeholder="Id..."
+                                        th:value="${product.id}" name="id">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Title</label>
+                                    <input type="text" class="form-control" placeholder="Title..."
+                                        th:field="${updateProduct.title}">
+                                    <p th:if="${#fields.hasErrors('title')}" th:errorclass="text-danger"
+                                        th:errors="${updateProduct.title}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Price</label>
+                                    <input type="text" id="priceField" class="form-control" placeholder="Price..."
+                                        th:field="${updateProduct.price}">
+                                    <p th:if="${#fields.hasErrors('price')}" th:errorclass="text-danger"
+                                        th:errors="${updateProduct.price}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Stock</label>
+                                    <input type="text" class="form-control" placeholder="Stock..."
+                                        th:field="${updateProduct.stock}">
+                                    <p th:if="${#fields.hasErrors('stock')}" th:errorclass="text-danger"
+                                        th:errors="${updateProduct.stock}"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="mt-2">Category</label>
+                                    <select class="form-select" th:field="${updateProduct.categoryId}">
+                                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                            th:text="${category.name}"
+                                            th:selected="${category.id} == ${updateProduct.categoryId}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Status</label>
+                                    <select class="form-select" th:field="${updateProduct.status}">
+                                        <option value="true">Đang hoạt động</option>
+                                        <option value="false">Bị khoá</option>
+                                    </select>
+                                    <p th:if="${#fields.hasErrors('status')}" th:errorclass="text-danger"
+                                        th:errors="${updateProduct.status}"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="mt-2">Manufactor</label>
+                                    <input type="text" class="form-control" placeholder="Manufactor..."
+                                        th:field="${updateProduct.manufactor}">
+                                    <p th:if="${#fields.hasErrors('manufactor')}" th:errorclass="text-danger"
+                                        th:errors="${updateProduct.manufactor}"></p>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4">
+                                    <label for="" class="mt-2">Description</label>
+                                    <textarea th:field="${updateProduct.description}" class="form-control"
+                                        rows="5"></textarea>
+                                    <p th:if="${#fields.hasErrors('description')}" th:errorclass="text-danger"
+                                        th:errors="${updateProduct.description}"></p>
+                                </div>
+                                <div class="col-md-4 d-flex flex-column ">
+                                    <div>
+                                        <img th:src="@{'/images/product/' + ${product.thumbnail}}" alt="Thumbail"
+                                            width="150">
+                                    </div>
+                                    <div>
+                                        <label for="" class="mt-2">Thumbnail</label>
+                                        <input class="form-control" type="file" th:field="${updateProduct.thumbnail}" />
+                                        <p th:if="${#fields.hasErrors('thumbnail')}" th:errorclass="text-danger"
+                                            th:errors="${updateProduct.thumbnail}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <a href="/admin/product" class="btn btn-outline-primary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Content-->
+
+        <th:block th:replace="~{admin/layout/footer :: footer}"></th:block>
+
+        <th:block th:replace="~{admin/layout/js :: js}"></th:block>
+        <!-- <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                let priceField = document.getElementById('priceField');
+                let priceValue = priceField.value.replace(/,/g, ''); // Remove any commas if present
+                if (priceValue) {
+                    priceField.value = Number(priceValue).toLocaleString('en-US'); // Format the price with commas
+                }
+            });
+            document.querySelector('form').addEventListener('submit', function () {
+                let priceField = document.getElementById('priceField');
+                priceField.value = priceField.value.replace(/,/g, ''); // Strip commas before submitting
+            });
+        </script> -->
+</body>
+
+</html>
